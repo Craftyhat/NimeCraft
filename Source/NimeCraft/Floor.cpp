@@ -10,7 +10,7 @@ AFloor::AFloor()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	SpawnLocation = FVector(-3000, -3000, 0);
+	SpawnLocation = FVector(-4000, -4000, 0);
 	SpawnRotation = FRotator::ZeroRotator;
 
 }

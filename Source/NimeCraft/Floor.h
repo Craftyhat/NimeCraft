@@ -10,8 +10,8 @@
 
 #define FLOOR_X 5
 
-constexpr int floorX = 50;
-constexpr int floorY = 50;
+constexpr int floorX = 70;
+constexpr int floorY = 70;
 
 UCLASS()
 class NIMECRAFT_API AFloor : public AActor

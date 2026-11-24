@@ -24,61 +24,70 @@ void AChunk::BeginPlay()
 
 	SpawnParams.OverrideLevel = GetLevel();
 
+	FTimerHandle TimerHandle;
+
+	float DelayTime = 2.0f;
+
 	bool Switcher = true;
 	int VoxelCount = 0;
 	int Size = 100;
 
-	for (int z = 0; z < ChunkZ; z++)
-	{
-		for (int y = 0; y < ChunkY; y++)
+	GetWorldTimerManager().SetTimer(TimerHandle, [this, Size, VoxelCount]()
 		{
-			for (int x = 0; x < ChunkX; x++)
+			for (int z = 0; z < ChunkZ; z++)
 			{
-
-				//Chunk[x][y][z] = GetWorld()->SpawnActor<ASlime>(ASlime::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
-
-
-				if (z == 0)
+				for (int y = 0; y < ChunkY; y++)
 				{
-					Chunk[x][y][z] = GetWorld()->SpawnActor<ACobble>(ACobble::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
-				}
-				else if (z == 1)
-				{
-					Chunk[x][y][z] = GetWorld()->SpawnActor<AOnyx>(AOnyx::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
-				}
-				else if (z == 2)
-				{
-					Chunk[x][y][z] = GetWorld()->SpawnActor<AMetal>(AMetal::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
-				}
-				else if (z == 3)
-				{
-					Chunk[x][y][z] = GetWorld()->SpawnActor<ASlime>(ASlime::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
-				}
-				else if (z == 4)
-				{
-					Chunk[x][y][z] = GetWorld()->SpawnActor<AGrass>(AGrass::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
-				}
-				else
-				{
-					Chunk[x][y][z] = GetWorld()->SpawnActor<ASlime>(ASlime::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
-				}
+					for (int x = 0; x < ChunkX; x++)
+					{
 
-				if (Chunk[x][y][z]) Chunk[x][y][z]->SetActorScale3D(FVector(BaseVoxelMeasurement, BaseVoxelMeasurement, BaseVoxelMeasurement));
+						//Chunk[x][y][z] = GetWorld()->SpawnActor<ASlime>(ASlime::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
 
-				VoxelCount++;
-				//Switcher = !Switcher;
 
-				SpawnLocation.X += (BaseVoxelMeasurement * Size);
+						if (z == 0)
+						{
+							Chunk[x][y][z] = GetWorld()->SpawnActor<ACobble>(ACobble::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+						}
+						else if (z == 1)
+						{
+							Chunk[x][y][z] = GetWorld()->SpawnActor<AOnyx>(AOnyx::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+						}
+						else if (z == 2)
+						{
+							Chunk[x][y][z] = GetWorld()->SpawnActor<AMetal>(AMetal::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+						}
+						else if (z == 3)
+						{
+							Chunk[x][y][z] = GetWorld()->SpawnActor<ASlime>(ASlime::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+						}
+						else if (z == 4)
+						{
+							Chunk[x][y][z] = GetWorld()->SpawnActor<AGrass>(AGrass::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+						}
+						else
+						{
+							Chunk[x][y][z] = GetWorld()->SpawnActor<ASlime>(ASlime::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
+						}
+
+						if (Chunk[x][y][z]) Chunk[x][y][z]->SetActorScale3D(FVector(BaseVoxelMeasurement, BaseVoxelMeasurement, BaseVoxelMeasurement));
+
+						//VoxelCount++;
+						//Switcher = !Switcher;
+
+						SpawnLocation.X += (BaseVoxelMeasurement * Size);
+					}
+					SpawnLocation.X -= (ChunkX * (BaseVoxelMeasurement * Size));
+					SpawnLocation.Y += (BaseVoxelMeasurement * Size);
+				}
+				SpawnLocation.Y -= (ChunkY * (BaseVoxelMeasurement * Size));
+				SpawnLocation.Z += (BaseVoxelMeasurement * Size);
 			}
-			SpawnLocation.X -= (ChunkX * (BaseVoxelMeasurement * Size));
-			SpawnLocation.Y += (BaseVoxelMeasurement * Size);
-		}
-		SpawnLocation.Y -= (ChunkY * (BaseVoxelMeasurement * Size));
-		SpawnLocation.Z += (BaseVoxelMeasurement * Size);
-	}
+		}, DelayTime, false);
+
 
 	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Black, FString::Printf(TEXT("Voxel Count: %d"), VoxelCount));
 }
+
 
 // Called every frame
 void AChunk::Tick(float DeltaTime)
